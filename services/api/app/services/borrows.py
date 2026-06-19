@@ -38,7 +38,7 @@ def create_borrow_order(
         select(BorrowOrder).where(
             and_(
                 BorrowOrder.user_id == user.id,
-                BorrowOrder.status.in_(["active", "overdue"]),
+                BorrowOrder.status.in_(["active"]),
             )
         )
     ).scalar_one_or_none()
@@ -101,7 +101,7 @@ def return_borrow_order(
     """
     # 获取订单级分布式锁，防止并发归还
     with redis_lock(f"order:{order.id}", timeout=10):
-        if order.status not in ("active", "overdue"):
+        if order.status != "active":
             raise ValueError(f"订单状态为 {order.status}，无法归还")
 
         # 幂等检查
@@ -129,14 +129,14 @@ def return_borrow_order(
 
         # 免费时间内无费用，超出后按整小时向上取整
         if actual_hours <= free_hours:
-            overdue_fee = Decimal("0.00")
+            usage_fee = Decimal("0.00")
         else:
             chargeable_hours = actual_hours - free_hours
             overdue_hours = math.ceil(chargeable_hours)
-            overdue_fee = (device.hourly_rate * Decimal(str(overdue_hours))).quantize(Decimal("0.01"))
+            usage_fee = (device.hourly_rate * Decimal(str(overdue_hours))).quantize(Decimal("0.01"))
 
-        total_fee = overdue_fee
-        order.overdue_fee = overdue_fee
+        total_fee = usage_fee
+        order.usage_fee = usage_fee
 
         # 退还押金（扣除费用）
         frozen_deposit = device.deposit_amount
@@ -144,13 +144,13 @@ def return_borrow_order(
         if refund_amount < 0:
             refund_amount = Decimal("0.00")
 
-        # 从用户账户扣除实际费用（逾期部分从余额扣）
+        # 从用户账户扣除实际费用（超出部分从余额扣）
         user = db.get(User, order.user_id)
         deduction = total_fee - refund_amount
         if deduction > 0:
             user.deposit_balance = max(Decimal("0.00"), user.deposit_balance - deduction)
             # 余额不足时标记 blocked
-            if user.deposit_balance <= 0 and overdue_fee > 0:
+            if user.deposit_balance <= 0 and usage_fee > 0:
                 user.status = "blocked"
 
         refund_deposit(db, order.user_id, refund_amount, order.id, "归还退还")
@@ -165,7 +165,7 @@ def return_borrow_order(
             "id": str(order.id),
             "returned_at": now,
             "actual_hours": round(actual_hours, 2),
-            "overdue_fee": overdue_fee,
+            "usage_fee": usage_fee,
             "total_fee": total_fee,
             "deposit_refund": refund_amount,
         }
@@ -176,7 +176,7 @@ def get_user_current_order(db: Session, user: User) -> BorrowOrder | None:
     stmt = select(BorrowOrder).where(
         and_(
             BorrowOrder.user_id == user.id,
-            BorrowOrder.status.in_(["active", "overdue"]),
+            BorrowOrder.status.in_(["active"]),
         )
     )
     return db.execute(stmt).scalar_one_or_none()

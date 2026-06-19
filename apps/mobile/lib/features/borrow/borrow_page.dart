@@ -113,7 +113,7 @@ class _BorrowPageState extends ConsumerState<BorrowPage> {
                   _buildRuleItem('借用自动计时，无需选择时长'),
                   _buildRuleItem('前 ${device.freeHours} 小时免费，超出按 ¥${device.hourlyRate}/小时 计费'),
                   _buildRuleItem('借出时冻结押金 ¥${device.depositAmount}，归还后退还剩余'),
-                  _buildRuleItem('逾期费按整小时向上取整'),
+                  _buildRuleItem('超出免费时长后按整小时向上取整'),
                 ],
               ),
             ),

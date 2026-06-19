@@ -25,7 +25,6 @@ class DeviceStatus {
 /// 订单状态
 class OrderStatus {
   static const String active = 'active';
-  static const String overdue = 'overdue';
   static const String returned = 'returned';
   static const String cancelled = 'cancelled';
 }

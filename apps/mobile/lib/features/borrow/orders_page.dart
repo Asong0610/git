@@ -72,14 +72,12 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     final dateFormat = DateFormat('MM-dd HH:mm');
     final statusColor = switch (order.status) {
       'active' => Colors.blue,
-      'overdue' => Colors.red,
       'returned' => Colors.green,
       'cancelled' => Colors.grey,
       _ => Colors.grey,
     };
     final statusLabel = switch (order.status) {
       'active' => '借用中',
-      'overdue' => '已逾期',
       'returned' => '已归还',
       'cancelled' => '已取消',
       _ => order.status,
@@ -110,10 +108,10 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
             _infoRow('免费截止', dateFormat.format(order.dueAt)),
             if (order.returnedAt != null)
               _infoRow('归还时间', dateFormat.format(order.returnedAt!)),
-            if (order.overdueFee != '0.00' && order.overdueFee != '0')
+            if (order.usageFee != '0.00' && order.usageFee != '0')
               Padding(
                 padding: const EdgeInsets.only(top: 4),
-                child: _infoRow('逾期费', '¥${order.overdueFee}', valueColor: Colors.red),
+                child: _infoRow('使用费', '¥${order.usageFee}', valueColor: Colors.red),
               ),
           ],
         ),
@@ -143,7 +141,7 @@ class OrderItem {
   final DateTime borrowedAt;
   final DateTime dueAt;
   final DateTime? returnedAt;
-  final String overdueFee;
+  final String usageFee;
 
   OrderItem({
     required this.id,
@@ -153,7 +151,7 @@ class OrderItem {
     required this.borrowedAt,
     required this.dueAt,
     this.returnedAt,
-    required this.overdueFee,
+    required this.usageFee,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
@@ -165,7 +163,7 @@ class OrderItem {
       borrowedAt: DateTime.parse(json['borrowed_at'] as String),
       dueAt: DateTime.parse(json['due_at'] as String),
       returnedAt: json['returned_at'] != null ? DateTime.parse(json['returned_at'] as String) : null,
-      overdueFee: json['overdue_fee'] as String,
+      usageFee: json['usage_fee'] as String,
     );
   }
 }

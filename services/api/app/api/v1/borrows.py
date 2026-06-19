@@ -74,7 +74,7 @@ def get_current_order(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """获取当前进行中的订单（active/overdue）。"""
+    """获取当前进行中的订单（active）。"""
     order = get_user_current_order(db, user)
     if not order:
         return None
@@ -116,7 +116,7 @@ def list_orders(
                 borrowed_at=order.borrowed_at,
                 due_at=order.due_at,
                 returned_at=order.returned_at,
-                overdue_fee=order.overdue_fee,
+                usage_fee=order.usage_fee,
             )
         )
 
@@ -148,5 +148,5 @@ def get_order(
         borrowed_at=order.borrowed_at,
         due_at=order.due_at,
         returned_at=order.returned_at,
-        overdue_fee=order.overdue_fee,
+        usage_fee=order.usage_fee,
     )

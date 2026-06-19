@@ -29,7 +29,7 @@ class ReturnResponse(BaseModel):
     id: str = Field(..., description="订单 ID")
     returned_at: datetime = Field(..., description="归还时间")
     actual_hours: float = Field(..., description="实际使用时长（小时）")
-    overdue_fee: Decimal = Field(..., description="逾期费")
+    usage_fee: Decimal = Field(..., description="使用费")
     total_fee: Decimal = Field(..., description="总费用")
     deposit_refund: Decimal = Field(..., description="退还押金")
 
@@ -44,7 +44,7 @@ class OrderItemResponse(BaseModel):
     borrowed_at: datetime = Field(..., description="借出时间")
     due_at: datetime = Field(..., description="免费截止时间")
     returned_at: datetime | None = Field(default=None, description="归还时间")
-    overdue_fee: Decimal = Field(..., description="逾期费")
+    usage_fee: Decimal = Field(..., description="使用费")
 
     model_config = {"from_attributes": True}
 
@@ -63,6 +63,6 @@ class OrderDetailResponse(BaseModel):
     borrowed_at: datetime = Field(..., description="借出时间")
     due_at: datetime = Field(..., description="免费截止时间")
     returned_at: datetime | None = Field(default=None, description="归还时间")
-    overdue_fee: Decimal = Field(..., description="逾期费")
+    usage_fee: Decimal = Field(..., description="使用费")
 
     model_config = {"from_attributes": True}

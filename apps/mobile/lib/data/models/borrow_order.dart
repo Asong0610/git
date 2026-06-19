@@ -37,7 +37,6 @@ class BorrowOrder {
     };
   }
   
-  bool get isOverdue => DateTime.now().isAfter(dueAt);
   
   Duration get remainingTime => dueAt.difference(DateTime.now());
 }

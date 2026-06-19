@@ -147,19 +147,19 @@ def test_json_encoder():
     print("\nDecimal 序列化验证通过！输出为字符串。")
 
 
-def test_overdue_fee_formula():
-    """验证逾期计费公式：向上取整。"""
+def test_usage_fee_formula():
+    """验证计时计费公式：向上取整。"""
     import math
     from decimal import Decimal
 
-    # 模拟：逾期 1.5 小时 -> 应计 2 小时
+    # 模拟：超出免费时长 1.5 小时 -> 应计 2 小时
     hourly_rate = Decimal("10.00")
-    overdue_seconds = 5400  # 1.5 小时
-    overdue_hours = math.ceil(overdue_seconds / 3600)
-    overdue_fee = hourly_rate * Decimal(str(overdue_hours))
-    assert overdue_hours == 2
-    assert overdue_fee == Decimal("20.00")
-    print("\n逾期计费公式验证通过！（1.5h -> 2h）")
+    extra_seconds = 5400  # 1.5 小时
+    extra_hours = math.ceil(extra_seconds / 3600)
+    usage_fee = hourly_rate * Decimal(str(extra_hours))
+    assert extra_hours == 2
+    assert usage_fee == Decimal("20.00")
+    print("\n计时计费公式验证通过！（1.5h -> 2h）")
 
 
 if __name__ == "__main__":
@@ -171,7 +171,7 @@ if __name__ == "__main__":
     test_jwt_token_flow()
     test_schemas()
     test_json_encoder()
-    test_overdue_fee_formula()
+    test_usage_fee_formula()
 
     print("\n" + "=" * 50)
     print("所有离线测试通过！")

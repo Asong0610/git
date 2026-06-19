@@ -1,4 +1,4 @@
-"""借还订单模型：关联用户与设备，记录幂等键与逾期费用。"""
+"""借还订单模型：关联用户与设备，记录幂等键与使用费用。"""
 
 import uuid
 from datetime import datetime
@@ -34,7 +34,7 @@ class BorrowOrder(Base):
   borrowed_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
   due_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, index=True)
   returned_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-  overdue_fee: Mapped[Decimal] = mapped_column(
+  usage_fee: Mapped[Decimal] = mapped_column(
     Numeric(12, 2),
     nullable=False,
     default=Decimal("0.00"),

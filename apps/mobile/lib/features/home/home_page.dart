@@ -87,8 +87,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 const SizedBox(width: 8),
                 const Text('当前借用中', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 const Spacer(),
-                if (order.isOverdue)
-                  const Chip(label: Text('已逾期'), backgroundColor: Colors.red, labelStyle: TextStyle(color: Colors.white)),
+
               ],
             ),
             const SizedBox(height: 8),

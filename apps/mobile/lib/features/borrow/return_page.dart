@@ -37,7 +37,7 @@ class _ReturnPageState extends ConsumerState<ReturnPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildResultRow('实际使用', '${result['actual_hours']} 小时'),
-              _buildResultRow('逾期费', '¥${result['overdue_fee']}'),
+              _buildResultRow('使用费', '¥${result['overdue_fee']}'),
               _buildResultRow('总费用', '¥${result['total_fee']}'),
               _buildResultRow('退还押金', '¥${result['deposit_refund']}'),
             ],
