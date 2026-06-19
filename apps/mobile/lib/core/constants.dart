@@ -1,10 +1,8 @@
 /// API 配置
 class ApiConstants {
-  // 开发环境
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1'; // Android 模拟器
-  // 生产环境
-  // static const String baseUrl = 'https://your-server.com/api/v1';
-  
+  // 云服务器地址
+  static const String baseUrl = 'http://111.231.77.186:8000/api/v1';
+
   static const Duration connectTimeout = Duration(seconds: 10);
   static const Duration receiveTimeout = Duration(seconds: 15);
 }
