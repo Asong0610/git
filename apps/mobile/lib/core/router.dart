@@ -6,6 +6,8 @@ import '../features/scan/scan_page.dart';
 import '../features/borrow/borrow_page.dart';
 import '../features/borrow/return_page.dart';
 import '../features/profile/profile_page.dart';
+import '../features/borrow/orders_page.dart';
+import '../features/profile/deposit_ledger_page.dart';
 import '../providers/auth_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -53,6 +55,14 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/profile',
         builder: (context, state) => const ProfilePage(),
+      ),
+      GoRoute(
+        path: '/orders',
+        builder: (context, state) => const OrdersPage(),
+      ),
+      GoRoute(
+        path: '/ledger',
+        builder: (context, state) => const DepositLedgerPage(),
       ),
     ],
   );

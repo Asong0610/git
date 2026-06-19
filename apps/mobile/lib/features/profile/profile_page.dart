@@ -88,18 +88,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                         leading: const Icon(Icons.receipt_long),
                         title: const Text('我的订单'),
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          // TODO: 跳转到订单列表
-                        },
+                        onTap: () => context.push('/orders'),
                       ),
                       const Divider(height: 1),
                       ListTile(
                         leading: const Icon(Icons.account_balance_wallet),
                         title: const Text('押金流水'),
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () {
-                          // TODO: 跳转到押金流水
-                        },
+                        onTap: () => context.push('/ledger'),
                       ),
                     ],
                   ),

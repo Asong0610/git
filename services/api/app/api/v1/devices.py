@@ -50,6 +50,8 @@ def list_device_endpoint(
                 category=d.category,
                 location=d.location,
                 hourly_rate=d.hourly_rate,
+                deposit_amount=d.deposit_amount,
+                free_hours=d.free_hours,
                 status=d.status,
             )
             for d in items
@@ -76,6 +78,8 @@ def get_device_endpoint(
         category=device.category,
         location=device.location,
         hourly_rate=device.hourly_rate,
+        deposit_amount=device.deposit_amount,
+        free_hours=device.free_hours,
         status=device.status,
     )
 
@@ -97,6 +101,8 @@ def create_device_endpoint(
         device_code=body.device_code,
         name=body.name,
         hourly_rate=body.hourly_rate,
+        deposit_amount=body.deposit_amount,
+        free_hours=body.free_hours,
         category=body.category,
         location=body.location,
     )
@@ -107,6 +113,8 @@ def create_device_endpoint(
         category=device.category,
         location=device.location,
         hourly_rate=device.hourly_rate,
+        deposit_amount=device.deposit_amount,
+        free_hours=device.free_hours,
         status=device.status,
     )
 
@@ -134,6 +142,8 @@ def update_device_endpoint(
         category=device.category,
         location=device.location,
         hourly_rate=device.hourly_rate,
+        deposit_amount=device.deposit_amount,
+        free_hours=device.free_hours,
         status=device.status,
     )
 

@@ -5,6 +5,8 @@ class Device {
   final String? category;
   final String? location;
   final String hourlyRate;
+  final String depositAmount;
+  final int freeHours;
   final String status;
   
   Device({
@@ -14,6 +16,8 @@ class Device {
     this.category,
     this.location,
     required this.hourlyRate,
+    required this.depositAmount,
+    required this.freeHours,
     required this.status,
   });
   
@@ -25,6 +29,8 @@ class Device {
       category: json['category'] as String?,
       location: json['location'] as String?,
       hourlyRate: json['hourly_rate'] as String,
+      depositAmount: json['deposit_amount'] as String,
+      freeHours: json['free_hours'] as int? ?? 2,
       status: json['status'] as String,
     );
   }
@@ -37,6 +43,8 @@ class Device {
       'category': category,
       'location': location,
       'hourly_rate': hourlyRate,
+      'deposit_amount': depositAmount,
+      'free_hours': freeHours,
       'status': status,
     };
   }

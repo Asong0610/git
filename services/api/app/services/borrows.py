@@ -14,15 +14,12 @@ from app.services.deposits import freeze_deposit, refund_deposit
 from app.services.devices import get_device_by_code
 from app.core.lock import redis_lock
 
-DEPOSIT_BUFFER = 2  # 押金缓冲倍数
-
 
 def create_borrow_order(
     db: Session,
     user: User,
     *,
     device_code: str,
-    duration_hours: int,
     idempotency_key: str,
 ) -> tuple[BorrowOrder, Device, Decimal]:
     """创建借出订单。
@@ -60,14 +57,16 @@ def create_borrow_order(
         if device.status != "available":
             raise ValueError(f"设备当前不可借用（状态: {device.status}）")
 
-        required_deposit = device.hourly_rate * duration_hours * DEPOSIT_BUFFER
+        # 使用设备固定押金
+        required_deposit = device.deposit_amount
         if user.deposit_balance < required_deposit:
             raise ValueError(
                 f"押金余额不足，需要 {required_deposit}，当前 {user.deposit_balance}"
             )
 
         now = datetime.utcnow()
-        due_at = now + timedelta(hours=duration_hours)
+        # due_at 现在是免费截止时间
+        due_at = now + timedelta(hours=device.free_hours)
 
         order = BorrowOrder(
             user_id=user.id,
@@ -122,26 +121,25 @@ def return_borrow_order(
         order.status = "returned"
         order.return_idempotency_key = idempotency_key
 
-        # 逾期计费：按整小时向上取整
+        # 计算费用
         device = db.get(Device, order.device_id)
-        overdue_seconds = max(0, (now - order.due_at).total_seconds())
-        if overdue_seconds > 0:
-            overdue_hours = math.ceil(overdue_seconds / 3600)
-            overdue_fee = (device.hourly_rate * Decimal(str(overdue_hours))).quantize(Decimal("0.01"))
-        else:
-            overdue_fee = Decimal("0.00")
-
-        # 正常时段费用（按时长 × 费率）
         actual_seconds = (now - order.borrowed_at).total_seconds()
         actual_hours = actual_seconds / 3600
-        borrowed_hours = (order.due_at - order.borrowed_at).total_seconds() / 3600
-        normal_fee = (device.hourly_rate * Decimal(str(min(actual_hours, borrowed_hours)))).quantize(Decimal("0.01"))
+        free_hours = device.free_hours
 
-        total_fee = normal_fee + overdue_fee
+        # 免费时间内无费用，超出后按整小时向上取整
+        if actual_hours <= free_hours:
+            overdue_fee = Decimal("0.00")
+        else:
+            chargeable_hours = actual_hours - free_hours
+            overdue_hours = math.ceil(chargeable_hours)
+            overdue_fee = (device.hourly_rate * Decimal(str(overdue_hours))).quantize(Decimal("0.01"))
+
+        total_fee = overdue_fee
         order.overdue_fee = overdue_fee
 
-        # 退还剩余押金
-        frozen_deposit = device.hourly_rate * Decimal(str(borrowed_hours)) * DEPOSIT_BUFFER
+        # 退还押金（扣除费用）
+        frozen_deposit = device.deposit_amount
         refund_amount = (frozen_deposit - total_fee).quantize(Decimal("0.01"))
         if refund_amount < 0:
             refund_amount = Decimal("0.00")

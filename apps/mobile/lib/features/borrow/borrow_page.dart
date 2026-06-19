@@ -15,12 +15,9 @@ class BorrowPage extends ConsumerStatefulWidget {
 }
 
 class _BorrowPageState extends ConsumerState<BorrowPage> {
-  int _durationHours = 2;
-
   Future<void> _borrowDevice() async {
     final success = await ref.read(currentOrderProvider.notifier).borrowDevice(
       widget.deviceCode,
-      _durationHours,
     );
 
     if (success && mounted) {
@@ -88,6 +85,8 @@ class _BorrowPageState extends ConsumerState<BorrowPage> {
                   _buildInfoRow('位置', device.location ?? '未知'),
                   _buildInfoRow('分类', device.category ?? '未分类'),
                   _buildInfoRow('费率', '¥${device.hourlyRate}/小时'),
+                  _buildInfoRow('免费时长', '${device.freeHours} 小时'),
+                  _buildInfoRow('押金', '¥${device.depositAmount}'),
                   _buildInfoRow('状态', device.isAvailable ? '可借' : '已借出'),
                 ],
               ),
@@ -95,38 +94,26 @@ class _BorrowPageState extends ConsumerState<BorrowPage> {
           ),
           const SizedBox(height: 24),
           
-          // 借用时长选择
-          const Text('选择借用时长', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 12),
-          Row(
-            children: [1, 2, 4, 8, 12, 24].map((hours) {
-              final selected = _durationHours == hours;
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: ChoiceChip(
-                    label: Text('${hours}h'),
-                    selected: selected,
-                    onSelected: (_) => setState(() => _durationHours = hours),
-                    selectedColor: Colors.blue.shade100,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 16),
-          
-          // 费用预估
+          // 计费说明
           Card(
             color: Colors.blue.shade50,
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildEstimateRow('预估费用', '¥${(double.parse(device.hourlyRate) * _durationHours).toStringAsFixed(2)}'),
-                  _buildEstimateRow('需冻结押金', '¥${(double.parse(device.hourlyRate) * _durationHours * 2).toStringAsFixed(2)}'),
-                  const SizedBox(height: 8),
-                  const Text('按时长计费，逾期按整小时向上取整', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 18, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text('计费说明', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  _buildRuleItem('借用自动计时，无需选择时长'),
+                  _buildRuleItem('前 ${device.freeHours} 小时免费，超出按 ¥${device.hourlyRate}/小时 计费'),
+                  _buildRuleItem('借出时冻结押金 ¥${device.depositAmount}，归还后退还剩余'),
+                  _buildRuleItem('逾期费按整小时向上取整'),
                 ],
               ),
             ),
@@ -165,14 +152,15 @@ class _BorrowPageState extends ConsumerState<BorrowPage> {
     );
   }
 
-  Widget _buildEstimateRow(String label, String value) {
+  Widget _buildRuleItem(String text) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 3),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(color: Colors.grey.shade700)),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+          const Padding(padding: EdgeInsets.only(top: 6), child: Icon(Icons.check_circle, size: 14, color: Colors.blue)),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 13))),
         ],
       ),
     );

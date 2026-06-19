@@ -8,11 +8,10 @@ class BorrowRepository {
   final _uuid = const Uuid();
   
   // 借出设备
-  Future<BorrowOrder> borrowDevice(String deviceCode, int durationHours) async {
+  Future<BorrowOrder> borrowDevice(String deviceCode) async {
     try {
       final response = await _api.post('/borrows', data: {
         'device_code': deviceCode,
-        'duration_hours': durationHours,
         'idempotency_key': _uuid.v4(),
       });
       

@@ -51,10 +51,10 @@ class CurrentOrderNotifier extends StateNotifier<CurrentOrderState> {
     }
   }
   
-  Future<bool> borrowDevice(String deviceCode, int durationHours) async {
+  Future<bool> borrowDevice(String deviceCode) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final order = await _borrowRepository.borrowDevice(deviceCode, durationHours);
+      final order = await _borrowRepository.borrowDevice(deviceCode);
       state = state.copyWith(isLoading: false, order: order);
       return true;
     } catch (e) {

@@ -35,7 +35,6 @@ def borrow_device(
         db,
         user,
         device_code=body.device_code,
-        duration_hours=body.duration_hours,
         idempotency_key=body.idempotency_key,
     )
 

@@ -1,5 +1,6 @@
 """设备服务。"""
 
+import uuid
 from decimal import Decimal
 from typing import Any
 
@@ -61,6 +62,8 @@ def create_device(
     device_code: str,
     name: str,
     hourly_rate: Decimal,
+    deposit_amount: Decimal = Decimal("0.00"),
+    free_hours: int = 2,
     category: str | None = None,
     location: str | None = None,
 ) -> Device:
@@ -69,6 +72,8 @@ def create_device(
         device_code=device_code,
         name=name,
         hourly_rate=hourly_rate,
+        deposit_amount=deposit_amount,
+        free_hours=free_hours,
         category=category,
         location=location,
     )

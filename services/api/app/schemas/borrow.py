@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field
 
 class BorrowCreateRequest(BaseModel):
     device_code: str = Field(..., min_length=1, max_length=32, description="设备业务码")
-    duration_hours: int = Field(..., gt=0, description="借用时长（小时）")
     idempotency_key: str = Field(..., min_length=1, max_length=64, description="幂等键")
 
 
@@ -16,7 +15,7 @@ class BorrowResponse(BaseModel):
     device_code: str = Field(..., description="设备业务码")
     device_name: str = Field(..., description="设备名称")
     borrowed_at: datetime = Field(..., description="借出时间")
-    due_at: datetime = Field(..., description="应还时间")
+    due_at: datetime = Field(..., description="免费截止时间")
     deposit_frozen: Decimal = Field(..., description="冻结押金")
 
     model_config = {"from_attributes": True}
@@ -43,7 +42,7 @@ class OrderItemResponse(BaseModel):
     device_name: str = Field(..., description="设备名称")
     status: str = Field(..., description="状态")
     borrowed_at: datetime = Field(..., description="借出时间")
-    due_at: datetime = Field(..., description="应还时间")
+    due_at: datetime = Field(..., description="免费截止时间")
     returned_at: datetime | None = Field(default=None, description="归还时间")
     overdue_fee: Decimal = Field(..., description="逾期费")
 
@@ -62,7 +61,7 @@ class OrderDetailResponse(BaseModel):
     user_id: str = Field(..., description="用户 ID")
     status: str = Field(..., description="状态")
     borrowed_at: datetime = Field(..., description="借出时间")
-    due_at: datetime = Field(..., description="应还时间")
+    due_at: datetime = Field(..., description="免费截止时间")
     returned_at: datetime | None = Field(default=None, description="归还时间")
     overdue_fee: Decimal = Field(..., description="逾期费")
 
