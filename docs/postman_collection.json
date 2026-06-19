@@ -1,0 +1,762 @@
+{
+  "info": {
+    "name": "校园共享设备 API - Stage 1 验收",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000/api/v1"
+    },
+    {
+      "key": "access_token",
+      "value": ""
+    },
+    {
+      "key": "refresh_token",
+      "value": ""
+    },
+    {
+      "key": "test_phone",
+      "value": "13800138000"
+    },
+    {
+      "key": "test_device_code",
+      "value": "DEV001"
+    },
+    {
+      "key": "order_id",
+      "value": ""
+    },
+    {
+      "key": "sms_code",
+      "value": "123456"
+    },
+    {
+      "key": "test_user_id",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health Check",
+      "item": [
+        {
+          "name": "健康检查",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status is ok', function() {",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.status).to.eql('ok');",
+                  "  pm.expect(json.database).to.eql('ok');",
+                  "  pm.expect(json.redis).to.eql('ok');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Auth",
+      "item": [
+        {
+          "name": "发送验证码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"phone\": \"{{test_phone}}\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/sms-code",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "sms-code"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('SMS code sent', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  console.log('Debug code:', json.debug_code);",
+                  "  if (json.debug_code) {",
+                  "    pm.collectionVariables.set('sms_code', json.debug_code);",
+                  "    console.log('已自动将验证码存入 sms_code 变量');",
+                  "  } else {",
+                  "    console.warn('debug_code 为空，请确保服务器 APP_ENV=development');",
+                  "  }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"phone\": \"{{test_phone}}\", \"sms_code\": \"{{sms_code}}\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login success', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.access_token).to.not.be.empty;",
+                  "  pm.collectionVariables.set('access_token', json.access_token);",
+                  "  pm.collectionVariables.set('refresh_token', json.refresh_token);",
+                  "  console.log('登录成功，access_token 已保存');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "刷新令牌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"refresh_token\": \"{{refresh_token}}\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Token refreshed', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.access_token).to.not.be.empty;",
+                  "  pm.collectionVariables.set('access_token', json.access_token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Users",
+      "item": [
+        {
+          "name": "获取个人信息",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile returned', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.phone).to.eql(pm.collectionVariables.get('test_phone'));",
+                  "  pm.collectionVariables.set('test_user_id', json.id);",
+                  "  console.log('已保存 test_user_id:', json.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "更新昵称",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"nickname\": \"测试用户\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Nickname updated', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.nickname).to.eql('测试用户');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "押金充值",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\": 500.00}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/me/deposit/topup",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "deposit",
+                "topup"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Deposit topped up', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.deposit_balance).to.be.gte(500);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "押金流水",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/me/deposit/ledger",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "me",
+                "deposit",
+                "ledger"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Ledger returned', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.items).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Devices",
+      "item": [
+        {
+          "name": "设备列表",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/devices?page=1&page_size=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "devices"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "page_size",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "按设备码查询",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/devices/{{test_device_code}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "devices",
+                "{{test_device_code}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "创建设备 (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"device_code\": \"{{test_device_code}}\", \"name\": \"共享充电宝\", \"category\": \"充电宝\", \"location\": \"图书馆一楼\", \"hourly_rate\": 2.50}"
+            },
+            "url": {
+              "raw": "{{base_url}}/devices",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "devices"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Device created or already exists', function() {",
+                  "  pm.expect([200, 409]).to.include(pm.response.code);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "5. Borrows",
+      "item": [
+        {
+          "name": "借出设备",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"device_code\": \"{{test_device_code}}\", \"duration_hours\": 2, \"idempotency_key\": \"borrow-{{$timestamp}}\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/borrows",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Borrow created', function() {",
+                  "  if (pm.response.code !== 200) {",
+                  "    console.error('借出失败，响应:', pm.response.text());",
+                  "  }",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.id).to.not.be.empty;",
+                  "  pm.collectionVariables.set('order_id', json.id);",
+                  "  console.log('借出成功，order_id:', json.id);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "订单列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/borrows",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows"
+              ]
+            }
+          }
+        },
+        {
+          "name": "订单详情",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/borrows/{{order_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows",
+                "{{order_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "当前订单",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/borrows/current",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows",
+                "current"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Current order returned', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  // 可能返回 null（无进行中订单）或订单详情",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "归还设备",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"idempotency_key\": \"return-{{$timestamp}}\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/borrows/{{order_id}}/return",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "borrows",
+                "{{order_id}}",
+                "return"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Return success', function() {",
+                  "  pm.expect(pm.response.code).to.eql(200);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.returned_at).to.not.be.empty;",
+                  "  pm.expect(json.total_fee).to.be.a('number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const orderId = pm.collectionVariables.get('order_id');",
+                  "if (!orderId) {",
+                  "  console.warn('order_id 为空，跳过归还测试');",
+                  "  // 无法直接跳过，所以抛出一个友好的错误提示",
+                  "  throw new Error('前置条件失败：借出设备未成功，无 order_id');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "6. Admin",
+      "item": [
+        {
+          "name": "用户押金调账（充值）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\": 200.00, \"remark\": \"管理员测试充值\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{test_user_id}}/deposit/adjust",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{test_user_id}}",
+                "deposit",
+                "adjust"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Deposit adjusted', function() {",
+                  "  pm.expect([200, 201]).to.include(pm.response.code);",
+                  "  var json = pm.response.json();",
+                  "  pm.expect(json.amount).to.eql('200.00');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "用户押金调账（扣款）",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"amount\": -50.00, \"remark\": \"管理员测试扣款\"}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/users/{{test_user_id}}/deposit/adjust",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "users",
+                "{{test_user_id}}",
+                "deposit",
+                "adjust"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

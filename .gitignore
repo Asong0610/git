@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+.venv/
+venv/
+*.whl
+dist/
+build/
+
+# Environment variables (secrets)
+.env
+.env.*
+!.env.example
+
+# Database
+*.sqlite3
+*.db
+
+# Logs
+*.log
+logs/
+
+# Uploads (local)
+.uploads/
+
+# Plan files (personal)
+*.plan.md
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Flutter
+apps/mobile/.dart_tool/
+apps/mobile/build/
+apps/mobile/.flutter-plugins-dependencies
+apps/mobile/.packages
+apps/mobile/.pub-cache/
+apps/mobile/.pub/
+
+# Node
+apps/admin/node_modules/
+apps/admin/dist/
+apps/admin/.env
+apps/admin/.env.local
+
+# Docker volumes
+deploy/data/
+
+# Pytest / Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Mypy / Ruff
+.mypy_cache/
+.ruff_cache/
+
+# Temporary
+*.tmp
+*.bak
