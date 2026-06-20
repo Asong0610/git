@@ -122,7 +122,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       labelText: '验证码',
                       prefixIcon: const Icon(Icons.lock),
                       border: const OutlineInputBorder(),
-                      suffixText: _debugCode != null ? '(​$​{_debugCode})' : null,
+                      suffixText: _debugCode != null ? '(\${_debugCode})' : null,
                     ),
                   ),
                 ),
