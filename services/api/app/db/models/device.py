@@ -1,4 +1,4 @@
-"""设备模型：二维码业务码、位置、押金、免费时长与小时单价。"""
+"""设备模型：二维码业务码、位置、押金、免费分钟与小时单价。"""
 
 import uuid
 from datetime import datetime
@@ -29,7 +29,7 @@ class Device(Base):
     default=Decimal("0.00"),
     server_default="0.00",
   )
-  free_hours: Mapped[int] = mapped_column(Integer, nullable=False, default=2, server_default="2")
+  free_minutes: Mapped[int] = mapped_column(Integer, nullable=False, default=5, server_default="5")
   status: Mapped[str] = mapped_column(
     String(16),
     nullable=False,

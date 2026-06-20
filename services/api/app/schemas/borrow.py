@@ -45,6 +45,7 @@ class OrderItemResponse(BaseModel):
     due_at: datetime = Field(..., description="免费截止时间")
     returned_at: datetime | None = Field(default=None, description="归还时间")
     usage_fee: Decimal = Field(..., description="使用费")
+    deposit_amount: Decimal = Field(default=Decimal("0.00"), description="冻结押金")
 
     model_config = {"from_attributes": True}
 

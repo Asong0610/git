@@ -63,7 +63,7 @@ def create_device(
     name: str,
     hourly_rate: Decimal,
     deposit_amount: Decimal = Decimal("0.00"),
-    free_hours: int = 2,
+    free_minutes: int = 5,
     category: str | None = None,
     location: str | None = None,
 ) -> Device:
@@ -73,7 +73,7 @@ def create_device(
         name=name,
         hourly_rate=hourly_rate,
         deposit_amount=deposit_amount,
-        free_hours=free_hours,
+        free_minutes=free_minutes,
         category=category,
         location=location,
     )

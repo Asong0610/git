@@ -92,11 +92,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                       ),
                       const Divider(height: 1),
                       ListTile(
-                        leading: const Icon(Icons.account_balance_wallet),
-                        title: const Text('押金流水'),
+                        leading: const Icon(Icons.help_outline),
+                        title: const Text('帮助与客服'),
                         trailing: const Icon(Icons.chevron_right),
-                        onTap: () => context.push('/ledger'),
+                        onTap: () => context.push('/faq'),
                       ),
+
                     ],
                   ),
                 ),
