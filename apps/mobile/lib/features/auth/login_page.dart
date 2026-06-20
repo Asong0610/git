@@ -26,13 +26,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _sendCode() async {
     final phone = _phoneController.text.trim();
     if (phone.isEmpty || phone.length < 11) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入正确的手机号')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请输入正确的手机号')),
+        );
+      }
       return;
     }
 
     final debugCode = await ref.read(authStateProvider.notifier).sendSmsCode(phone);
+    
+    // 每次异步操作后检查 mounted
+    if (!mounted) return;
+    
     if (debugCode != null) {
       setState(() {
         _codeSent = true;
@@ -54,20 +60,28 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final code = _codeController.text.trim();
 
     if (phone.isEmpty || code.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请输入手机号和验证码')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('请输入手机号和验证码')),
+        );
+      }
       return;
     }
 
     final success = await ref.read(authStateProvider.notifier).login(phone, code);
-    if (success && mounted) {
+    
+    // 每次异步操作后检查 mounted
+    if (!mounted) return;
+
+    if (success) {
       context.go('/');
     } else {
       final error = ref.read(authStateProvider).error;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(error ?? '登录失败')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error ?? '登录失败')),
+        );
+      }
     }
   }
 
@@ -108,7 +122,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       labelText: '验证码',
                       prefixIcon: const Icon(Icons.lock),
                       border: const OutlineInputBorder(),
-                      suffixText: _debugCode != null ? '(${_debugCode})' : null,
+                      suffixText: _debugCode != null ? '(​$​{_debugCode})' : null,
                     ),
                   ),
                 ),

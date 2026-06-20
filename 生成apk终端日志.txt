@@ -1,0 +1,500 @@
+Launching lib\main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...             18.4s
+This app is linked to the debug service: ws://127.0.0.1:60029/OVAbHkLa8zg=/ws
+Debug service listening on ws://127.0.0.1:60029/OVAbHkLa8zg=/ws
+
+  To hot restart changes while running, press "r" or "R".
+For a more detailed help message, press "h". To quit, press "q".
+
+A Dart VM Service on Chrome is available at: http://127.0.0.1:60029/OVAbHkLa8zg=
+
+The Flutter DevTools debugger and profiler on Chrome is available at:
+http://127.0.0.1:9100?uri=http://127.0.0.1:60029/OVAbHkLa8zg=
+Error: setState() called after dispose(): _LoginPageState#92405(lifecycle state: defunct, not mounted)
+This error happens if you call setState() on a State object for a widget that no longer appears in the widget tree
+(e.g., whose parent widget no longer includes the widget in its build). This error can occur when code calls setState()
+from a timer or an animation callback.
+The preferred solution is to cancel the timer or stop listening to the animation in the dispose() callback. Another
+solution is to check the "mounted" property of this object before calling setState() to ensure the object is still in
+the tree.
+This error might indicate a memory leak if setState() is being called because another object is retaining a reference to
+this State object after it has been removed from the tree. To avoid memory leaks, consider breaking the reference to
+this object during dispose().
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 296:3  throw_
+packages/flutter/src/widgets/framework.dart 1167:9                           <fn>
+packages/flutter/src/widgets/framework.dart 1201:14                          setState
+packages/campus_device_mobile/features/auth/login_page.dart 37:7             _sendCode
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 45:50           <fn>
+dart-sdk/lib/async/zone.dart 1661:54                                         runUnary
+dart-sdk/lib/async/future_impl.dart 163:18                                   handleValue
+dart-sdk/lib/async/future_impl.dart 861:44                                   handleValueCallback
+dart-sdk/lib/async/future_impl.dart 890:13                                   _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 666:5                                    [_completeWithValue]
+dart-sdk/lib/async/future_impl.dart 736:7                                    callback
+dart-sdk/lib/async/schedule_microtask.dart 40:11                             _microtaskLoop
+dart-sdk/lib/async/schedule_microtask.dart 49:5                              _startMicrotaskLoop
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 181:7           <fn>
+Error: Bad state: Cannot use "ref" after the widget was disposed.
+dart-sdk/lib/_internal/js_dev_runtime/private/ddc_runtime/errors.dart 296:3  throw_
+packages/flutter_riverpod/src/consumer.dart 550:7                            [_assertNotDisposed]
+packages/flutter_riverpod/src/consumer.dart 619:5                            read
+packages/campus_device_mobile/features/auth/login_page.dart 67:49            _login
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 45:50           <fn>
+dart-sdk/lib/async/zone.dart 1661:54                                         runUnary
+dart-sdk/lib/async/future_impl.dart 163:18                                   handleValue
+dart-sdk/lib/async/future_impl.dart 861:44                                   handleValueCallback
+dart-sdk/lib/async/future_impl.dart 890:13                                   _propagateToListeners
+dart-sdk/lib/async/future_impl.dart 666:5                                    [_completeWithValue]
+dart-sdk/lib/async/future_impl.dart 736:7                                    callback
+dart-sdk/lib/async/schedule_microtask.dart 40:11                             _microtaskLoop
+dart-sdk/lib/async/schedule_microtask.dart 49:5                              _startMicrotaskLoop
+dart-sdk/lib/_internal/js_dev_runtime/patch/async_patch.dart 181:7           <fn>
+══╡ EXCEPTION CAUGHT BY WIDGETS LIBRARY ╞═══════════════════════════════════════════════════════════
+The following JSNoSuchMethodError was thrown building Builder(dirty):
+TypeError: Cannot read properties of undefined (reading 'BorrowPage')
+
+The relevant error-causing widget was:
+  Builder
+  Builder:file:///C:/Users/mixian/AppData/Local/Pub/Cache/hosted/pub.dev/go_router-14.8.1/lib/src/builder.dart:259:9
+
+When the exception was thrown, this was the stack:
+packages/campus_device_mobile/core/router.dart 45:38                            <fn>
+packages/go_router/src/builder.dart 260:21                                      <fn>
+packages/flutter/src/widgets/basic.dart 7688:48                                 build
+packages/flutter/src/widgets/framework.dart 5687:22                             build
+packages/flutter/src/widgets/framework.dart 5617:15                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 6900:14                             mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5599:5                              [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5771:11                             [_firstBuild]
+packages/flutter/src/widgets/framework.dart 5593:5                              mount
+packages/flutter/src/widgets/framework.dart 4468:15                             inflateWidget
+packages/flutter/src/widgets/framework.dart 7035:36                             inflateWidget
+packages/flutter/src/widgets/framework.dart 3963:18                             updateChild
+packages/flutter/src/widgets/framework.dart 4150:32                             updateChildren
+packages/flutter/src/widgets/framework.dart 7060:17                             update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/inherited_notifier.dart 105:11                     update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/inherited_notifier.dart 105:11                     update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 6907:14                             update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 6907:14                             update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/inherited_notifier.dart 105:11                     update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5803:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5693:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 5946:5                              update
+packages/flutter/src/widgets/framework.dart 3941:14                             updateChild
+packages/flutter/src/widgets/framework.dart 5642:16                             performRebuild
+packages/flutter/src/widgets/framework.dart 5780:11                             performRebuild
+packages/flutter/src/widgets/framework.dart 5333:7                              rebuild
+packages/flutter/src/widgets/framework.dart 2693:14                             [_tryRebuild]
+packages/flutter/src/widgets/framework.dart 2752:11                             [_flushDirtyElements]
+packages/flutter/src/widgets/framework.dart 3048:17                             buildScope
+packages/flutter/src/widgets/binding.dart 1162:9                                drawFrame
+packages/flutter/src/rendering/binding.dart 468:5                               [_handlePersistentFrameCallback]
+packages/flutter/src/scheduler/binding.dart 1397:7                              [_invokeFrameCallback]
+packages/flutter/src/scheduler/binding.dart 1318:9                              handleDrawFrame
+packages/flutter/src/scheduler/binding.dart 1176:5                              [_handleDrawFrame]
+lib/_engine/engine/platform_dispatcher.dart 1408:5                              invoke
+lib/_engine/engine/platform_dispatcher.dart 310:5                               invokeOnDrawFrame
+lib/_engine/engine/initialization.dart 187:36                                   <fn>
+dart-sdk/lib/_internal/js_dev_runtime/patch/js_allow_interop_patch.dart 188:27  _callDartFunctionFast1
+
+════════════════════════════════════════════════════════════════════════════════════════════════════
+SocketException: 远程计算机拒绝网络连接。
+ (OS Error: 远程计算机拒绝网络连接。
+, errno = 1225), address = localhost, port = 54343
+#0      _NativeSocket.startConnect (dart:io-patch/socket_patch.dart:721:35)
+#1      _RawSocket.startConnect (dart:io-patch/socket_patch.dart:1920:26)
+#2      RawSocket.startConnect (dart:io-patch/socket_patch.dart:27:23)
+#3      Socket._startConnect (dart:io-patch/socket_patch.dart:2144:22)
+#4      Socket.startConnect (dart:io/socket.dart:825:21)
+#5      _ConnectionTarget.connect (dart:_http/http_impl.dart:2491:20)
+#6      _HttpClient._getConnection.connect (dart:_http/http_impl.dart:2930:12)
+#7      _HttpClient._getConnection (dart:_http/http_impl.dart:2935:12)
+#8      _HttpClient._openUrl (dart:_http/http_impl.dart:2790:12)
+#9      _HttpClient.getUrl (dart:_http/http_impl.dart:2632:48)
+#10     ChromeConnection.getUrl (package:webkit_inspection_protocol/webkit_inspection_protocol.dart:108:33)
+#11     ChromeConnection.getTabs (package:webkit_inspection_protocol/webkit_inspection_protocol.dart:53:26)
+#12     ChromeConnection.getTab (package:webkit_inspection_protocol/webkit_inspection_protocol.dart:90:31)
+<asynchronous suspension>
+#13     Chromium.close (package:flutter_tools/src/web/chrome.dart:510:30)
+<asynchronous suspension>
+#14     ChromiumDevice.stopApp (package:flutter_tools/src/web/web_device.dart:164:5)
+<asynchronous suspension>
+#15     ResidentWebRunner._cleanup (package:flutter_tools/src/isolated/resident_web_runner.dart:203:5)
+<asynchronous suspension>
+#16     ResidentWebRunner._cleanupAndExit (package:flutter_tools/src/isolated/resident_web_runner.dart:217:5)
+<asynchronous suspension>
+#17     Future._propagateToListeners.handleWhenCompleteCallback.<anonymous closure> (dart:async/future_impl.dart:854:56)
+<asynchronous suspension>
+
+Failed to establish connection with the application instance in Chrome.
+This can happen if the websocket connection used by the web tooling is unable to correctly establish a connection, for
+example due to a firewall.
+PS D:\xxqWORK\apps\mobile> curl http://111.231.77.186:80/api/v1/health
+{"status": "ok", "database": "ok", "redis": "ok"}
+PS D:\xxqWORK\apps\mobile> flutter --version
+Flutter 3.24.0 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 80c2e84975 (1 year, 11 months ago) • 2024-07-30 23:06:49 +0700
+Engine • revision b8800d88be
+Tools • Dart 3.5.0 • DevTools 2.37.2
+PS D:\xxqWORK\apps\mobile> flutter build apk --release
+
+Exception in thread "main" java.net.ConnectException: Connection timed out: connect
+        at java.base/sun.nio.ch.Net.connect0(Native Method)
+        at java.base/sun.nio.ch.Net.connect(Net.java:579)
+        at java.base/sun.nio.ch.Net.connect(Net.java:568)
+        at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:588)
+        at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+        at java.base/java.net.Socket.connect(Socket.java:633)
+        at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304)
+        at java.base/sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:174)
+        at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:183)
+        at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:532)
+        at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:637)
+        at java.base/sun.net.www.http.HttpClient.parseHTTP(HttpClient.java:780)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1688)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1589)
+        at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:224)
+        at org.gradle.wrapper.Download.downloadInternal(Download.java:58)
+        at org.gradle.wrapper.Download.download(Download.java:44)
+        at org.gradle.wrapper.Install$1.call(Install.java:61)
+        at org.gradle.wrapper.Install$1.call(Install.java:48)
+        at org.gradle.wrapper.ExclusiveFileAccessManager.access(ExclusiveFileAccessManager.java:65)
+        at org.gradle.wrapper.Install.createDist(Install.java:48)
+        at org.gradle.wrapper.WrapperExecutor.execute(WrapperExecutor.java:128)
+        at org.gradle.wrapper.GradleWrapperMain.main(GradleWrapperMain.java:61)
+Running Gradle task 'assembleRelease'...                           46.7s
+[!] Gradle threw an error while downloading artifacts from the network.
+Retrying Gradle Build: #1, wait time: 100ms
+Exception in thread "main" java.net.ConnectException: Connection timed out: connect
+        at java.base/sun.nio.ch.Net.connect0(Native Method)
+        at java.base/sun.nio.ch.Net.connect(Net.java:579)
+        at java.base/sun.nio.ch.Net.connect(Net.java:568)
+        at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:588)
+        at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+        at java.base/java.net.Socket.connect(Socket.java:633)
+        at java.base/sun.security.ssl.SSLSocketImpl.connect(SSLSocketImpl.java:304)
+        at java.base/sun.security.ssl.BaseSSLSocketImpl.connect(BaseSSLSocketImpl.java:174)
+        at java.base/sun.net.NetworkClient.doConnect(NetworkClient.java:183)
+        at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:532)
+        at java.base/sun.net.www.http.HttpClient.openServer(HttpClient.java:637)
+        at java.base/sun.net.www.protocol.https.HttpsClient.<init>(HttpsClient.java:266)
+        at java.base/sun.net.www.protocol.https.HttpsClient.New(HttpsClient.java:380)
+        at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.getNewHttpClient(AbstractDelegateHttpsURLConnection.java:193)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect0(HttpURLConnection.java:1242)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:1128)
+        at java.base/sun.net.www.protocol.https.AbstractDelegateHttpsURLConnection.connect(AbstractDelegateHttpsURLConnection.java:179)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.followRedirect0(HttpURLConnection.java:2902)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.followRedirect(HttpURLConnection.java:2811)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1927)
+        at java.base/sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1589)
+        at java.base/sun.net.www.protocol.https.HttpsURLConnectionImpl.getInputStream(HttpsURLConnectionImpl.java:224)
+        at org.gradle.wrapper.Download.downloadInternal(Download.java:58)
+        at org.gradle.wrapper.Download.download(Download.java:44)
+        at org.gradle.wrapper.Install$1.call(Install.java:61)
+        at org.gradle.wrapper.Install$1.call(Install.java:48)
+        at org.gradle.wrapper.ExclusiveFileAccessManager.access(ExclusiveFileAccessManager.java:65)
+        at org.gradle.wrapper.Install.createDist(Install.java:48)
+        at org.gradle.wrapper.WrapperExecutor.execute(WrapperExecutor.java:128)
+        at org.gradle.wrapper.GradleWrapperMain.main(GradleWrapperMain.java:61)
+Running Gradle task 'assembleRelease'...                           22.5s
+[!] Gradle threw an error while downloading artifacts from the network.
+Gradle task assembleRelease failed with exit code 1
