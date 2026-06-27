@@ -32,17 +32,18 @@ def create_borrow_order(
     if existing:
         raise ValueError("该请求已处理，请勿重复提交")
 
-    active_order = db.execute(
-        select(BorrowOrder).where(
-            and_(
-                BorrowOrder.user_id == user.id,
-                BorrowOrder.status.in_(["active", "overdue"]),
-            )
-        )
-    ).scalar_one_or_none()
-    if active_order:
-        raise ValueError("你已有未归还的设备，请先归还后再借新设备")
-
+# [MODIFIED] Removed single device restriction to allow multiple concurrent rentals
+#     active_order = db.execute(
+#         select(BorrowOrder).where(
+#             and_(
+#                 BorrowOrder.user_id == user.id,
+#                 BorrowOrder.status.in_(["active", "overdue"]),
+#             )
+#         )
+#     ).scalar_one_or_none()
+#     if active_order:
+#         raise ValueError("你已有未归还的设备，请先归还后再借新设备")
+# 
     if user.status == "blocked":
         raise ValueError("账号已被限制，无法借出设备")
 
