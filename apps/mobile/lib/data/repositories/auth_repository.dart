@@ -7,13 +7,21 @@ class AuthRepository {
   final ApiClient _api = ApiClient();
   
   // 发送验证码
-  Future<String?> sendSmsCode(String phone) async {
+  // 返回值: {message: "验证码已发送", debugCode: "123456" | null}
+  Future<Map<String, String?>> sendSmsCode(String phone) async {
     try {
       final response = await _api.post('/auth/sms-code', data: {'phone': phone});
       if (response.statusCode == 200) {
-        return response.data['debug_code'] as String?;
+        final data = response.data;
+        return {
+          'message': data['message'] as String? ?? '验证码已发送',
+          'debugCode': data['debug_code'] as String?,
+        };
       }
-      return null;
+      return {
+        'message': '发送验证码失败',
+        'debugCode': null,
+      };
     } catch (e) {
       rethrow;
     }

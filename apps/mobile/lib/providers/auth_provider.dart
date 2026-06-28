@@ -60,15 +60,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
   
-  Future<String?> sendSmsCode(String phone) async {
+  Future<Map<String, String?>> sendSmsCode(String phone) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final debugCode = await _authRepository.sendSmsCode(phone);
+      final result = await _authRepository.sendSmsCode(phone);
       state = state.copyWith(isLoading: false);
-      return debugCode;
+      return result;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
-      return null;
+      return {
+        'message': '发送验证码失败，请稍后重试',
+        'debugCode': null,
+      };
     }
   }
   

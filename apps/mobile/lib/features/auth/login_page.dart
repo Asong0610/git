@@ -79,20 +79,36 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       return;
     }
 
-    final debugCode = await ref.read(authStateProvider.notifier).sendSmsCode(phone);
-    
+    final result = await ref.read(authStateProvider.notifier).sendSmsCode(phone);
+
     if (!mounted) return;
-    
-    if (debugCode != null) {
+
+    final message = result['message'] ?? '操作完成';
+    final debugCode = result['debugCode'];
+
+    // 判断是否为成功响应（后端 message 默认为 "验证码已发送"）
+    final isSuccess = message.contains('已发送');
+
+    // 始终展示服务器返回的消息
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(isSuccess && debugCode != null
+            ? '验证码已发送：$debugCode'
+            : message),
+        backgroundColor: isSuccess ? Colors.green : Colors.red,
+      ),
+    );
+
+    if (isSuccess) {
       setState(() {
         _codeSent = true;
       });
-      _codeController.text = debugCode;
-      await _showVerificationCodeDialog(debugCode);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('发送验证码失败')),
-      );
+
+      // 开发环境：自动填充验证码并弹窗展示
+      if (debugCode != null) {
+        _codeController.text = debugCode;
+        await _showVerificationCodeDialog(debugCode);
+      }
     }
   }
 
