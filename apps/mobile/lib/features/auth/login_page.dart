@@ -27,11 +27,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Get Verification Code'),
+        title: const Text('获取验证码'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Your verification code is:'),
+            const Text('您的验证码是：'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(16),
@@ -51,7 +51,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ),
             const SizedBox(height: 16),
             const Text(
-              'Automatically filled in the input field',
+              '已自动填入输入框',
               style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
@@ -61,7 +61,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('OK'),
+            child: const Text('确定'),
           ),
         ],
       ),
@@ -73,7 +73,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (phone.isEmpty || phone.length < 11) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter a correct phone number')),
+          const SnackBar(content: Text('请输入正确的手机号')),
         );
       }
       return;
@@ -91,7 +91,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       await _showVerificationCodeDialog(debugCode);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to send verification code')),
+        const SnackBar(content: Text('发送验证码失败')),
       );
     }
   }
@@ -103,7 +103,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (phone.isEmpty || code.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter phone number and verification code')),
+          const SnackBar(content: Text('请输入手机号和验证码')),
         );
       }
       return;
@@ -119,7 +119,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       final error = ref.read(authStateProvider).error;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error ?? 'Login failed')),
+          SnackBar(content: Text(error ?? '登录失败')),
         );
       }
     }
@@ -130,7 +130,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final authState = ref.watch(authStateProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('登录')),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -138,15 +138,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             const Icon(Icons.phone_android, size: 80, color: Colors.blue),
             const SizedBox(height: 32),
-            const Text('Campus Equipment Sharing', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text('校园设备共享', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text('Scan to borrow and return, convenient life', style: TextStyle(fontSize: 16, color: Colors.grey)),
+            const Text('扫码借还，便捷生活', style: TextStyle(fontSize: 16, color: Colors.grey)),
             const SizedBox(height: 48),
             TextField(
               controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
-                labelText: 'Phone Number',
+                labelText: '手机号',
                 prefixIcon: const Icon(Icons.phone),
                 border: OutlineInputBorder(),
               ),
@@ -159,7 +159,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     controller: _codeController,
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: 'Verification Code',
+                      labelText: '验证码',
                       prefixIcon: const Icon(Icons.lock),
                       border: OutlineInputBorder(),
                     ),
@@ -170,7 +170,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: authState.isLoading ? null : _sendCode,
-                    child: Text(_codeSent ? 'Resend' : 'Send Code'),
+                    child: Text(_codeSent ? '重新发送' : '发送验证码'),
                   ),
                 ),
               ],
@@ -183,7 +183,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 onPressed: authState.isLoading ? null : _login,
                 child: authState.isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text('Login', style: TextStyle(fontSize: 16)),
+                    : const Text('登录', style: TextStyle(fontSize: 16)),
               ),
             ),
           ],

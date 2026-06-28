@@ -103,6 +103,8 @@ const handleSendCode = async () => {
   try {
     sendingCode.value = true
     const res = await sendSmsCode(form.phone)
+    console.log('sms response:', res)
+    console.log('debug_code:', res.debug_code)
     
     // 开发环境自动填入验证码
     if (res.debug_code) {

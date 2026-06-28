@@ -1,7 +1,7 @@
 /// API 配置
 class ApiConstants {
   // 云服务器地址
-  static const String baseUrl = 'http://111.231.77.186:8000/api/v1';
+  static const String baseUrl = '/api/v1';
 
   static const Duration connectTimeout = Duration(seconds: 10);
   static const Duration receiveTimeout = Duration(seconds: 15);
