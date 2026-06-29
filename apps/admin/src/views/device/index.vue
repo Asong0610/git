@@ -62,6 +62,14 @@
             </el-tag>
           </template>
         </el-table-column>
+        <el-table-column label="二维码" width="100" align="center">
+          <template #default="{ row }">
+            <el-button type="primary" link @click="showQRCode(row.device_code)">
+              <el-icon><Picture /></el-icon>
+              二维码
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" width="200" fixed="right">
           <template #default="{ row }">
             <el-button type="primary" link @click="handleEdit(row)">
@@ -138,12 +146,30 @@
         </el-button>
       </template>
     </el-dialog>
+
+    <!-- 二维码弹窗 -->
+    <el-dialog
+      v-model="qrDialogVisible"
+      title="设备二维码"
+      width="320px"
+      center
+    >
+      <div style="text-align: center;">
+        <img :src="qrCodeUrl" alt="二维码" style="width: 240px; height: 240px;" />
+        <div style="margin-top: 16px; font-size: 18px; font-weight: bold;">{{ currentDeviceCode }}</div>
+        <div style="margin-top: 8px; font-size: 14px; color: #666;">扫码可直接进入借出页面</div>
+      </div>
+      <template #footer>
+        <el-button @click="qrDialogVisible = false">关闭</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Picture } from '@element-plus/icons-vue'
 import { getDeviceList, createDevice, updateDevice, deleteDevice } from '../../api/device'
 
 const loading = ref(false)
@@ -153,6 +179,17 @@ const dialogTitle = ref('添加设备')
 const isEdit = ref(false)
 const submitLoading = ref(false)
 const formRef = ref(null)
+
+// QR Code
+const qrDialogVisible = ref(false)
+const currentDeviceCode = ref('')
+const qrCodeUrl = ref('')
+
+const showQRCode = (deviceCode) => {
+  currentDeviceCode.value = deviceCode
+  qrCodeUrl.value = `/api/v1/devices/${deviceCode}/qrcode`
+  qrDialogVisible.value = true
+}
 
 const searchForm = reactive({
   deviceCode: '',
