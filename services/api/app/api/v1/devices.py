@@ -63,6 +63,26 @@ def list_device_endpoint(
     )
 
 
+@router.get("/{device_code}/qrcode", response_class=StreamingResponse)
+def get_device_qrcode(device_code: str, db: Session = Depends(get_db)):
+    """获取设备二维码（PNG格式）。"""
+    device = get_device_by_code(db, device_code)
+    if not device:
+        from app.core.exceptions import AppError
+        raise AppError("设备不存在", code="DEVICE_NOT_FOUND", status_code=404)
+
+    # 生成二维码，内容为设备码
+    qr = qrcode.QRCode(version=1, box_size=10, border=4)
+    qr.add_data(device.device_code)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+
+    # 保存到内存流
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+
+
 @router.get("/{device_code}", response_model=DeviceResponse)
 def get_device_endpoint(
     device_code: str,
@@ -164,23 +184,4 @@ def delete_device_endpoint(
         raise AppError("设备不存在", code="DEVICE_NOT_FOUND", status_code=404)
 
     delete_device(db, device)
-@router.get("/{device_code}/qrcode", response_class=StreamingResponse)
-def get_device_qrcode(device_code: str, db: Session = Depends(get_db)):
-    """获取设备二维码（PNG格式）。"""
-    device = get_device_by_code(db, device_code)
-    if not device:
-        from app.core.exceptions import AppError
-        raise AppError("设备不存在", code="DEVICE_NOT_FOUND", status_code=404)
-
-    # 生成二维码，内容为设备码
-    qr = qrcode.QRCode(version=1, box_size=10, border=4)
-    qr.add_data(device.device_code)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="black", back_color="white")
-
-    # 保存到内存流
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    buf.seek(0)
-
     return StreamingResponse(buf, media_type="image/png")
