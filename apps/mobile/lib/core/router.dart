@@ -4,7 +4,6 @@ import '../features/auth/login_page.dart';
 import '../features/home/home_page.dart';
 import '../features/scan/scan_page.dart';
 import '../features/borrow/borrow_page.dart';
-import '../features/borrow/return_page.dart';
 import '../features/profile/profile_page.dart';
 import '../features/borrow/orders_page.dart';
 import '../features/service/faq_page.dart';
@@ -43,12 +42,6 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/borrow/:deviceCode',
         builder: (context, state) => BorrowPage(
           deviceCode: state.pathParameters['deviceCode']!,
-        ),
-      ),
-      GoRoute(
-        path: '/borrow/return/:orderId',
-        builder: (context, state) => ReturnPage(
-          orderId: state.pathParameters['orderId']!,
         ),
       ),
       GoRoute(

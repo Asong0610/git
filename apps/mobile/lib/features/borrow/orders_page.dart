@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../data/api/api_client.dart';
+import 'package:uuid/uuid.dart';
 
 class OrdersPage extends ConsumerStatefulWidget {
   const OrdersPage({super.key});
@@ -17,6 +18,8 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
   String? _error;
   int _total = 0;
   final int _page = 1;
+  final Map<String, bool> _returningOrders = {};
+  final _uuid = const Uuid();
 
   @override
   void initState() {
@@ -37,6 +40,117 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     } catch (e) {
       setState(() { _error = e.toString(); _loading = false; });
     }
+  }
+
+
+  Future<void> _returnOrder(OrderItem order) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.warning_amber, color: Colors.orange, size: 28),
+            SizedBox(width: 8),
+            Text('确认归还'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('设备：${order.deviceName}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            const Text('归还后将自动计算费用并退还押金。'),
+            const SizedBox(height: 12),
+            const Text('确定继续？', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('取消'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('确认归还'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    setState(() { _returningOrders[order.id] = true; });
+
+    try {
+      final response = await _api.post('/borrows/${order.id}/return', data: {
+        'idempotency_key': _uuid.v4(),
+      });
+
+      if (response.statusCode == 200 && mounted) {
+        final result = response.data;
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Row(
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 28),
+                SizedBox(width: 8),
+                Text('归还成功'),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildResultRow('实际使用', '${result['\'actual_hours\'']} 小时'),
+                _buildResultRow('使用费', '¥${result['\'usage_fee\'']}'),
+                _buildResultRow('总费用', '¥${result['\'total_fee\'']}'),
+                _buildResultRow('退还押金', '¥${result['\'deposit_refund\'']}'),
+              ],
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                  _loadOrders();
+                },
+                child: const Text('确定'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('归还失败：${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() { _returningOrders.remove(order.id); });
+      }
+    }
+  }
+
+  Widget _buildResultRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(color: Colors.grey.shade600)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
   }
 
   @override
@@ -113,6 +227,27 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                 padding: const EdgeInsets.only(top: 4),
                 child: _infoRow('使用费', '¥${order.usageFee}', valueColor: Colors.red),
               ),
+
+            if (order.status == 'active') ...[
+              const SizedBox(height: 12),
+              const Divider(height: 1),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                height: 40,
+                child: ElevatedButton.icon(
+                  onPressed: _returningOrders[order.id] == true ? null : () => _returnOrder(order),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
+                  icon: _returningOrders[order.id] == true
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Icon(Icons.assignment_return, size: 18),
+                  label: Text(_returningOrders[order.id] == true ? '归还中...' : '确认归还'),
+                ),
+              ),
+            ],
           ],
         ),
       ),
