@@ -23,6 +23,17 @@ jobs:
           remote_user: ${{ secrets.SERVER_USER }}
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Build Flutter Web
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/project/xxqWORK/apps/mobile
+            /opt/flutter/bin/flutter build web --base-href /mobile/ --output /root/project/web/mobile
+            echo "Flutter Web build completed at $(date)"
+
       - name: Restart campus-device-nginx container
         uses: appleboy/ssh-action@v1.0.3
         with:
