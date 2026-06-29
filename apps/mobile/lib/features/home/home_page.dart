@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../data/models/device.dart';
 import '../../providers/device_provider.dart';
-import '../../providers/borrow_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -18,14 +17,12 @@ class _HomePageState extends ConsumerState<HomePage> {
     super.initState();
     Future.microtask(() {
       ref.read(deviceListProvider.notifier).loadDevices();
-      ref.read(currentOrderProvider.notifier).loadCurrentOrder();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceState = ref.watch(deviceListProvider);
-    final orderState = ref.watch(currentOrderProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,9 +38,6 @@ class _HomePageState extends ConsumerState<HomePage> {
         onRefresh: () => ref.read(deviceListProvider.notifier).loadDevices(),
         child: Column(
           children: [
-            // 当前订单卡片
-            if (orderState.order != null)
-              _buildCurrentOrderCard(orderState.order!),
             
             // 设备列表
             Expanded(
@@ -72,41 +66,6 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
-  Widget _buildCurrentOrderCard(order) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      color: Colors.orange.shade50,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.warning_amber, color: Colors.orange),
-                const SizedBox(width: 8),
-                const Text('当前借用中', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                const Spacer(),
-
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text('设备: ${order.deviceName}'),
-            Text('应还时间: ${order.dueAt.toLocal().toString().substring(0, 16)}'),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => context.push('/borrow/return/${order.id}'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                child: const Text('归还设备', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget _buildDeviceCard(Device device) {
     return Card(

@@ -109,10 +109,10 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildResultRow('实际使用', '${result['\'actual_hours\'']} 小时'),
-                _buildResultRow('使用费', '¥${result['\'usage_fee\'']}'),
-                _buildResultRow('总费用', '¥${result['\'total_fee\'']}'),
-                _buildResultRow('退还押金', '¥${result['\'deposit_refund\'']}'),
+                _buildResultRow('实际使用', '${result['actual_hours']} 小时'),
+                _buildResultRow('使用费', '¥${result['usage_fee']}'),
+                _buildResultRow('总费用', '¥${result['total_fee']}'),
+                _buildResultRow('退还押金', '¥${result['deposit_refund']}'),
               ],
             ),
             actions: [
