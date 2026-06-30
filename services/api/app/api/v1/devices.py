@@ -81,6 +81,7 @@ def get_device_qrcode(device_code: str, db: Session = Depends(get_db)):
     buf = BytesIO()
     img.save(buf, format="PNG")
     buf.seek(0)
+    return StreamingResponse(buf, media_type="image/png")
 
 
 @router.get("/{device_code}", response_model=DeviceResponse)
@@ -184,4 +185,3 @@ def delete_device_endpoint(
         raise AppError("设备不存在", code="DEVICE_NOT_FOUND", status_code=404)
 
     delete_device(db, device)
-    return StreamingResponse(buf, media_type="image/png")
