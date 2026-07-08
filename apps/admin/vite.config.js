@@ -5,7 +5,7 @@ import { resolve } from 'path'
 export default defineConfig({
   build: {
     outDir: "/root/project/web",
-    emptyOutDir: true
+    emptyOutDir: false
   },
   plugins: [vue()],
   resolve: {
