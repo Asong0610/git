@@ -11,3 +11,15 @@ export function getOrderDetail(orderId) {
 export function getCurrentOrder() {
   return request.get('/borrows/current')
 }
+
+export function getTimeStats(params = {}) {
+  return request.get('/admin/statistics/orders', { params })
+}
+
+export function getDeviceStats(params = {}) {
+  return request.get('/admin/statistics/devices', { params })
+}
+
+export function exportStatistics(params = {}) {
+  return request.get('/admin/statistics/export', { params, responseType: 'blob' })
+}

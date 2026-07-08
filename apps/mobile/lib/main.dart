@@ -39,7 +39,7 @@ class _CampusDeviceAppState extends ConsumerState<CampusDeviceApp> {
           centerTitle: true,
           elevation: 0,
         ),
-        cardTheme: CardThemeData(
+        cardTheme: CardTheme(
           elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),

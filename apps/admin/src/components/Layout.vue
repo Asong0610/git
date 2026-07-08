@@ -33,6 +33,14 @@
           <el-icon><Wallet /></el-icon>
           <span>押金流水</span>
         </el-menu-item>
+        <el-menu-item index="/statistics">
+          <el-icon><TrendCharts /></el-icon>
+          <span>数据统计</span>
+        </el-menu-item>
+        <el-menu-item index="/faults">
+          <el-icon><WarningFilled /></el-icon>
+          <span>故障工单</span>
+        </el-menu-item>
       </el-menu>
     </el-aside>
 
@@ -75,6 +83,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '../store/auth'
 import { ElMessageBox } from 'element-plus'
+import { Monitor, DataAnalysis, Document, User, Wallet, WarningFilled, ArrowDown, TrendCharts } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const authStore = useAuthStore()

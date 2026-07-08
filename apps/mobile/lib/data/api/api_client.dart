@@ -1,22 +1,42 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants.dart';
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
   factory ApiClient() => _instance;
-  
+
   late Dio _dio;
-  
+
   ApiClient._internal() {
-    _dio = Dio(BaseOptions(
+    final baseOptions = BaseOptions(
       baseUrl: ApiConstants.baseUrl,
       connectTimeout: ApiConstants.connectTimeout,
       receiveTimeout: ApiConstants.receiveTimeout,
       headers: {
         'Content-Type': 'application/json',
+        if (ApiConstants.hostHeader != null)
+          'Host': ApiConstants.hostHeader!,
       },
-    ));
+    );
+
+    _dio = Dio(baseOptions);
+
+    // 原生环境：连接使用 IP 地址，需跳过 SSL 主机名校验
+    // （服务器证书签发给域名，不是 IP）
+    if (!kIsWeb) {
+      _dio.httpClientAdapter = IOHttpClientAdapter(
+        createHttpClient: () {
+          final client = HttpClient();
+          client.badCertificateCallback = (cert, host, port) => true;
+          return client;
+        },
+      );
+    }
     
     // 添加拦截器
     _dio.interceptors.add(InterceptorsWrapper(

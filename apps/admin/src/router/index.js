@@ -42,6 +42,18 @@ const routes = [
         name: 'Deposit',
         component: () => import('../views/deposit/index.vue'),
         meta: { title: '押金流水' }
+      },
+      {
+        path: 'statistics',
+        name: 'Statistics',
+        component: () => import('../views/statistics/index.vue'),
+        meta: { title: '数据统计' }
+      },
+      {
+        path: 'faults',
+        name: 'Faults',
+        component: () => import('../views/fault/index.vue'),
+        meta: { title: '故障工单' }
       }
     ]
   }

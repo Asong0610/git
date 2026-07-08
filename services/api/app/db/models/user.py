@@ -20,6 +20,8 @@ class User(Base):
   )
   phone: Mapped[str] = mapped_column(String(20), unique=True, nullable=False, index=True)
   nickname: Mapped[str | None] = mapped_column(String(64), nullable=True)
+  student_id: Mapped[str | None] = mapped_column(String(20), unique=True, nullable=True, index=True)
+  name: Mapped[str | None] = mapped_column(String(50), nullable=True)
   deposit_balance: Mapped[Decimal] = mapped_column(
     Numeric(12, 2),
     nullable=False,
