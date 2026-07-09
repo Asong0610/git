@@ -16,6 +16,10 @@ export function getDepositLedger(params = {}) {
   return request.get('/users/me/deposit/ledger', { params })
 }
 
+export function getAdminDepositLedger(params = {}) {
+  return request.get('/admin/deposits/ledger', { params })
+}
+
 export function adjustUserDeposit(userId, amount, remark) {
   return request.post(`/admin/users/${userId}/deposit/adjust`, { amount, remark })
 }

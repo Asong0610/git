@@ -34,8 +34,12 @@
       <!-- 表格 -->
       <el-table :data="tableData" v-loading="loading" border stripe>
         <el-table-column prop="id" label="订单ID" width="320" show-overflow-tooltip />
-        <el-table-column prop="device_code" label="设备码" width="120" />
-        <el-table-column prop="device_name" label="设备名称" min-width="150" />
+        <el-table-column label="设备名称" min-width="200">
+          <template #default="{ row }">
+            {{ row.device_name }}
+            <span v-if="row.device_code" style="color: #909399; margin-left: 4px;">({{ row.device_code }})</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="状态" width="100" align="center">
           <template #default="{ row }">
             <el-tag :type="getStatusType(row.status)">
@@ -92,11 +96,9 @@
         <el-descriptions-item label="订单ID" :span="2">
           {{ currentOrder.id }}
         </el-descriptions-item>
-        <el-descriptions-item label="设备码">
-          {{ currentOrder.device_code }}
-        </el-descriptions-item>
-        <el-descriptions-item label="设备名称">
+        <el-descriptions-item label="设备" :span="2">
           {{ currentOrder.device_name }}
+          <span v-if="currentOrder.device_code" style="color: #909399; margin-left: 4px;">({{ currentOrder.device_code }})</span>
         </el-descriptions-item>
         <el-descriptions-item label="状态">
           <el-tag :type="getStatusType(currentOrder.status)">

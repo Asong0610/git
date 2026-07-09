@@ -7,8 +7,35 @@
         </div>
       </template>
 
+      <!-- 搜索栏 -->
+      <el-form :inline="true" :model="searchForm" class="search-form">
+        <el-form-item label="用户">
+          <el-input v-model="searchForm.keyword" placeholder="手机号 / 昵称" clearable />
+        </el-form-item>
+        <el-form-item label="类型">
+          <el-select v-model="searchForm.entryType" placeholder="全部" clearable>
+            <el-option label="充值" value="topup" />
+            <el-option label="冻结" value="freeze" />
+            <el-option label="退还" value="refund" />
+            <el-option label="调账" value="adjust" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSearch">
+            <el-icon><Search /></el-icon>
+            搜索
+          </el-button>
+          <el-button @click="handleReset">
+            <el-icon><Refresh /></el-icon>
+            重置
+          </el-button>
+        </el-form-item>
+      </el-form>
+
       <el-table :data="tableData" v-loading="loading" border stripe>
-        <el-table-column prop="entry_type" label="类型" width="120" align="center">
+        <el-table-column prop="phone" label="手机号" width="140" />
+        <el-table-column prop="nickname" label="昵称" width="120" />
+        <el-table-column prop="entry_type" label="类型" width="100" align="center">
           <template #default="{ row }">
             <el-tag :type="getTypeColor(row.entry_type)">
               {{ getTypeText(row.entry_type) }}
@@ -52,10 +79,15 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getDepositLedger } from '../../api/user'
+import { getAdminDepositLedger } from '../../api/user'
 
 const loading = ref(false)
 const tableData = ref([])
+
+const searchForm = reactive({
+  keyword: '',
+  entryType: ''
+})
 
 const pagination = reactive({
   page: 1,
@@ -98,10 +130,14 @@ const formatTime = (time) => {
 const loadData = async () => {
   loading.value = true
   try {
-    const res = await getDepositLedger({
+    const params = {
       page: pagination.page,
       page_size: pagination.pageSize
-    })
+    }
+    if (searchForm.keyword) params.keyword = searchForm.keyword
+    if (searchForm.entryType) params.entry_type = searchForm.entryType
+
+    const res = await getAdminDepositLedger(params)
     tableData.value = res.items
     pagination.total = res.total
   } catch (error) {
@@ -109,6 +145,17 @@ const loadData = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleSearch = () => {
+  pagination.page = 1
+  loadData()
+}
+
+const handleReset = () => {
+  searchForm.keyword = ''
+  searchForm.entryType = ''
+  handleSearch()
 }
 
 const handleSizeChange = (size) => {
@@ -135,5 +182,9 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.search-form {
+  margin-bottom: 20px;
 }
 </style>

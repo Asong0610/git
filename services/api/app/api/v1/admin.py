@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import AppError
 from app.core.redis import get_redis_client
+from app.db.models.deposit_ledger import DepositLedger
 from app.db.models.user import User
 from app.db.session import get_db
 from app.dependencies import require_admin
@@ -59,7 +60,6 @@ def adjust_deposit(
     if user.status == "blocked" and user.deposit_balance > 0:
         user.status = "active"
 
-    from app.db.models.deposit_ledger import DepositLedger
     ledger = DepositLedger(
         user_id=user.id,
         entry_type="adjust",
@@ -180,6 +180,51 @@ def export_users(
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": f"attachment; filename={filename}"},
     )
+
+
+@router.get("/deposits/ledger")
+def admin_deposit_ledger(
+    page: int = Query(1, ge=1, description="页码"),
+    page_size: int = Query(20, ge=1, le=100, description="每页数量"),
+    keyword: str = Query("", description="搜索关键字（手机号/昵称）"),
+    entry_type: str | None = Query(None, description="流水类型筛选"),
+    _admin: str = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    """管理员查询全部用户押金流水（含用户信息）。"""
+    query = (
+        db.query(DepositLedger, User.phone, User.name)
+        .join(User, DepositLedger.user_id == User.id)
+    )
+    if keyword:
+        kw = f"%{keyword}%"
+        query = query.filter(or_(User.phone.ilike(kw), User.name.ilike(kw)))
+    if entry_type:
+        query = query.filter(DepositLedger.entry_type == entry_type)
+
+    total = query.count()
+    rows = (
+        query.order_by(DepositLedger.created_at.desc())
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+
+    items = []
+    for ledger, phone, name in rows:
+        items.append({
+            "id": str(ledger.id),
+            "user_id": str(ledger.user_id),
+            "phone": phone,
+            "nickname": name or "",
+            "entry_type": ledger.entry_type,
+            "amount": ledger.amount,
+            "balance_after": ledger.balance_after,
+            "remark": ledger.remark,
+            "created_at": ledger.created_at,
+        })
+
+    return {"items": items, "total": total, "page": page, "page_size": page_size}
 
 
 @router.get("/faults", response_model=FaultListResponse)
