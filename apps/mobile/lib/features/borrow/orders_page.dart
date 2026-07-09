@@ -101,6 +101,14 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                           }
                           setDialogState(() => submitting = true);
                           try {
+                            if (order.deviceId.isEmpty) {
+                              setDialogState(() => submitting = false);
+                              if (!mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('设备信息缺失，请刷新后重试')),
+                              );
+                              return;
+                            }
                             await _api.post('/faults', data: {
                               'device_id': order.deviceId,
                               'description': description,
@@ -411,14 +419,14 @@ class OrderItem {
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
       id: json['id'] as String,
-      deviceId: json['device_id'] as String,
+      deviceId: (json['device_id'] as String?) ?? '',
       deviceCode: json['device_code'] as String,
       deviceName: json['device_name'] as String,
       status: json['status'] as String,
       borrowedAt: DateTime.parse(json['borrowed_at'] as String),
       dueAt: DateTime.parse(json['due_at'] as String),
       returnedAt: json['returned_at'] != null ? DateTime.parse(json['returned_at'] as String) : null,
-      usageFee: json['usage_fee'] as String,
+      usageFee: json['usage_fee']?.toString() ?? '0',
     );
   }
 }
