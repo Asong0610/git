@@ -43,6 +43,103 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
   }
 
 
+  Future<void> _reportFault(OrderItem order) async {
+    final controller = TextEditingController();
+    bool submitting = false;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Row(
+                children: [
+                  Icon(Icons.report_problem, color: Colors.orange, size: 28),
+                  SizedBox(width: 8),
+                  Text('故障报修'),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _infoRow('设备', order.deviceName),
+                  const SizedBox(height: 12),
+                  TextField(
+                    controller: controller,
+                    maxLines: 4,
+                    maxLength: 500,
+                    decoration: const InputDecoration(
+                      hintText: '请描述设备故障情况（1~500字）',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: submitting ? null : () => Navigator.pop(context),
+                  child: const Text('取消'),
+                ),
+                ElevatedButton(
+                  onPressed: submitting
+                      ? null
+                      : () async {
+                          final description = controller.text.trim();
+                          if (description.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('请填写故障描述')),
+                            );
+                            return;
+                          }
+                          if (description.length > 500) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('故障描述不能超过500字')),
+                            );
+                            return;
+                          }
+                          setDialogState(() => submitting = true);
+                          try {
+                            await _api.post('/faults', data: {
+                              'device_id': order.deviceId,
+                              'description': description,
+                            });
+                            if (!mounted) return;
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('工单已提交，管理员将尽快处理')),
+                            );
+                          } catch (e) {
+                            setDialogState(() => submitting = false);
+                            if (!mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('提交失败：${e.toString()}')),
+                            );
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: submitting
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                        )
+                      : const Text('提交工单'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    controller.dispose();
+  }
+
   Future<void> _returnOrder(OrderItem order) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -232,20 +329,40 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
               const SizedBox(height: 12),
               const Divider(height: 1),
               const SizedBox(height: 8),
-              SizedBox(
-                width: double.infinity,
-                height: 40,
-                child: ElevatedButton.icon(
-                  onPressed: _returningOrders[order.id] == true ? null : () => _returnOrder(order),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: OutlinedButton.icon(
+                        onPressed: () => _reportFault(order),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.orange,
+                          side: const BorderSide(color: Colors.orange),
+                        ),
+                        icon: const Icon(Icons.report_problem, size: 18),
+                        label: const Text('故障报修'),
+                      ),
+                    ),
                   ),
-                  icon: _returningOrders[order.id] == true
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                      : const Icon(Icons.assignment_return, size: 18),
-                  label: Text(_returningOrders[order.id] == true ? '归还中...' : '确认归还'),
-                ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: SizedBox(
+                      height: 40,
+                      child: ElevatedButton.icon(
+                        onPressed: _returningOrders[order.id] == true ? null : () => _returnOrder(order),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        icon: _returningOrders[order.id] == true
+                            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                            : const Icon(Icons.assignment_return, size: 18),
+                        label: Text(_returningOrders[order.id] == true ? '归还中...' : '确认归还'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ],
@@ -270,6 +387,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
 
 class OrderItem {
   final String id;
+  final String deviceId;
   final String deviceCode;
   final String deviceName;
   final String status;
@@ -280,6 +398,7 @@ class OrderItem {
 
   OrderItem({
     required this.id,
+    required this.deviceId,
     required this.deviceCode,
     required this.deviceName,
     required this.status,
@@ -292,6 +411,7 @@ class OrderItem {
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
       id: json['id'] as String,
+      deviceId: json['device_id'] as String,
       deviceCode: json['device_code'] as String,
       deviceName: json['device_name'] as String,
       status: json['status'] as String,

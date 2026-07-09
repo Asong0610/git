@@ -38,6 +38,7 @@ class ReturnResponse(BaseModel):
 
 class OrderItemResponse(BaseModel):
     id: str = Field(..., description="订单 ID")
+    device_id: str = Field(..., description="设备 ID")
     device_code: str = Field(..., description="设备业务码")
     device_name: str = Field(..., description="设备名称")
     status: str = Field(..., description="状态")

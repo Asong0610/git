@@ -110,6 +110,7 @@ def list_orders(
         order_items.append(
             OrderItemResponse(
                 id=str(order.id),
+                device_id=str(order.device_id),
                 device_code=device.device_code if device else "",
                 device_name=device.name if device else "",
                 status=order.status,
