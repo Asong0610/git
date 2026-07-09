@@ -6,10 +6,7 @@ import sqlalchemy as sa
 from alembic import op
 
 revision = "004_add_student_fields"
-down_revision = (
-    "003_change_free_hours_to_minutes",
-    "003_rename_overdue_fee_to_usage_fee",
-)
+down_revision = "003_rename_overdue_fee"
 branch_labels = None
 depends_on = None
 
